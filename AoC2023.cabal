@@ -1,0 +1,35 @@
+cabal-version:      2.4
+name:               AoC2023
+version:            0.1.0.0
+
+-- A short (one-line) description of the package.
+-- synopsis:
+
+-- A longer description of the package.
+-- description:
+
+-- A URL where users can report bugs.
+-- bug-reports:
+
+-- The license under which the package is released.
+-- license:
+author:             Luke Moran
+maintainer:         luke.moran2004@gmail.com
+
+-- A copyright notice.
+-- copyright:
+-- category:
+extra-source-files: CHANGELOG.md, Day1.hs, Day2.hs, Day3.hs, Day4.hs, Day5.hs
+
+executable AoC2023
+    main-is:          Main.hs
+
+    -- Modules included in this executable, other than Main.
+    other-modules: Day1, Utils, Day2, Day3, Day4, Day5
+
+    -- LANGUAGE extensions used by modules in this package.
+    -- other-extensions: 
+    -- default-extensions:
+    build-depends:    base ^>=4.16.3.0, containers,gigaparsec==0.2.1.0
+    hs-source-dirs:   app
+    default-language: GHC2021
