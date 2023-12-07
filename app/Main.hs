@@ -4,6 +4,8 @@ import Day2
 import Day3
 import Day4
 import Day5
+import Day6
+
 main :: IO ()
 main = do
     Day1.solve
@@ -11,3 +13,4 @@ main = do
     Day3.solve
     Day4.solve
     Day5.solve
+    Day6.solve
