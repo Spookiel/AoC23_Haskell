@@ -19,13 +19,13 @@ maintainer:         luke.moran2004@gmail.com
 -- A copyright notice.
 -- copyright:
 -- category:
-extra-source-files: CHANGELOG.md, Day1.hs, Day2.hs, Day3.hs, Day4.hs, Day5.hs, Day6.hs, Day7.hs
+extra-source-files: CHANGELOG.md, Day1.hs, Day2.hs, Day3.hs, Day4.hs, Day5.hs, Day6.hs, Day7.hs, Day8.hs, Day9.hs
 
 executable AoC2023
     main-is:          Main.hs
 
     -- Modules included in this executable, other than Main.
-    other-modules: Day1, Utils, Day2, Day3, Day4, Day5, Day6, Day7
+    other-modules: Day1, Utils, Day2, Day3, Day4, Day5, Day6, Day7,Day8, Day9
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions: 

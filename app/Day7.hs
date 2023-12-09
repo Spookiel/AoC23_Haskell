@@ -12,7 +12,8 @@ data Type = High | OP | TP | ToK | FH | FourKind | FiveKind deriving (Show, Eq, 
 type Hand = [Card]
 
 
-
+-- Idea is that the jokers can be added to the most frequent
+-- card to make the strongest possible hand
 countCards :: Hand -> [Int]
 countCards cs 
     | null freqs = [jokers]
@@ -37,23 +38,16 @@ pcard = choice [
     Q <$ char 'Q',
     K <$ char 'K',
     A <$ char 'A']
---,
+
 p1cards = pcard <|> (J <$ char 'J')
 p2cards = pcard <|> (Joker <$ char 'J')
 
+phand :: Parsec Card -> Parsec Hand
+phand pcard = many pcard <* whitespaces
 
-phand1 = many p1cards <* whitespaces
-phand2 = many p2cards <* whitespaces
-
-pline2 :: Parsec (Hand, Int)
-pline2 = do
-    hand <- phand2 <* whitespaces
-    bid <- sdecimal <* whitespaces
-    return (hand, bid)
-
-pline1 :: Parsec (Hand, Int)
-pline1 = do
-    hand <- phand1 <* whitespaces
+pline :: Parsec Hand ->  Parsec (Hand, Int)
+pline phand= do
+    hand <- phand <* whitespaces
     bid <- sdecimal <* whitespaces
     return (hand, bid)
 
@@ -106,9 +100,10 @@ part1 his = sum $ zipWith (*) [1..] (map snd sortedHands)
     where
         sortedHands = sortBy (\(h1, _) (h2, _) -> compareHand h1 h2) his
 part2 = part1
+
 solve = do
-    (Success p1cards) <- parseFromFile @String (many pline1) "input/Day7.in"
-    (Success p2cards) <- parseFromFile @String (many pline2) "input/Day7.in"
+    (Success p1cards) <- parseFromFile @String (many (pline (phand p1cards))) "input/Day7.in"
+    (Success p2cards) <- parseFromFile @String (many (pline (phand p2cards))) "input/Day7.in"
     let p1ans = part1 p1cards
     let p2ans = part2 p2cards
     
