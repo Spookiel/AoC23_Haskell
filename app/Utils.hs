@@ -7,7 +7,7 @@ import Text.Gigaparsec
 import Text.Gigaparsec.Char
 import Text.Gigaparsec.Combinator
 import Data.Maybe
-
+import qualified Data.Array as A
 
 split :: String -> Char -> [String]
 split s delim = go s delim [] where
@@ -92,3 +92,6 @@ sdecimal = do
     spaces
     return $ read ((fromMaybe ' ' s):cs)
 
+
+tabulate :: A.Ix i => (i,i) -> (i -> a) -> A.Array i a
+tabulate r f = A.array r (map (\x -> (x, f x)) (A.range r))
