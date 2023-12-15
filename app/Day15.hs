@@ -13,20 +13,14 @@ type Label = String
 data Operation = Rem Label | Ins Label Int deriving (Show, Eq)
 type BoxLens = (Label, Int)
 
-prem :: Label -> Parsec Operation
-prem la = do
-    char '-'
-    return $ Rem la
+prem :: Parsec (Label -> Operation)
+prem = char '-' $> Rem
 
-pins :: Label -> Parsec Operation
-pins la = do
-    focal <- char '=' *> sdecimal
-    return $ Ins la focal
+pins :: Parsec (Label -> Operation)
+pins = (char '=' *> sdecimal) <**> pure (flip Ins)
 
 pop :: Parsec Operation
-pop = do
-    la <- some letter
-    prem la <|> pins la
+pop = some letter <**> (prem <|> pins)
 
 repr :: Operation -> Label
 repr (Rem la) = la++"-"
@@ -40,10 +34,11 @@ applyOperation state (Rem label) = M.adjust (filter (\y -> label /= fst y)) (has
 applyOperation state (Ins label focus) = M.insert key newBox state
     where
         key = hash label
-        newBox = update (label, focus) relBox
         relBox = M.findWithDefault [] key state
+        newBox = update (label, focus) relBox
+        
 focusPower :: M.Map Int [BoxLens] -> Int
-focusPower state = sum [sum $ zipWith (\x y -> (k+1)*x*y) [1..] (map snd v)| (k,v) <- M.toList state]
+focusPower state = sum [(k+1) * sum (zipWith (*) [1..] (map snd v))| (k,v) <- M.toList state]
 
 hash :: Label -> Int
 hash s = go s 0
@@ -53,7 +48,7 @@ hash s = go s 0
         go (c:cs) acc = go cs (((acc+ord c) * 17) `mod` 256)
 
 part2 :: [Operation] -> Int
-part2 ops = focusPower (foldl applyOperation M.empty ops)
+part2 = focusPower . foldl applyOperation M.empty
 
 solve = do
     Success ops <- parseFromFile @String (sepBy1 pop (char ',')) "input/Day15.in"
