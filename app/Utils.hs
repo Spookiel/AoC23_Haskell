@@ -20,6 +20,17 @@ split s delim = go s delim [] where
 splitLines :: String -> [String]
 splitLines s = split s '\n'
 
+
+-- Updates a value in a list of pairs, if the value is not there
+-- then inserts at the end
+update :: Eq a => (a,b) -> [(a,b)] -> [(a,b)]
+update i@(k,v) [] = [i]
+update i@(k,v) (oi@(k', _):kvs)
+    | k == k' = i:kvs
+    | otherwise = oi:update i kvs
+
+
+
 replaceInd :: [a] -> Int -> a -> [a]
 replaceInd [] ind rep = [rep]
 replaceInd (x:xs) ind rep
