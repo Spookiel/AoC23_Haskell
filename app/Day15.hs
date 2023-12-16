@@ -1,5 +1,4 @@
 module Day15 where
-
 import Utils
 import Data.Char
 import Debug.Trace
@@ -10,6 +9,7 @@ import Text.Gigaparsec.Combinator
 
 
 type Label = String
+type Boxes = M.Map Int [BoxLens]
 data Operation = Rem Label | Ins Label Int deriving (Show, Eq)
 type BoxLens = (Label, Int)
 
@@ -28,7 +28,7 @@ repr (Ins la d) = la++"="++show d
 
 --Store box in correct order, so last thing is at the back
 
-applyOperation :: M.Map Int [BoxLens] -> Operation -> M.Map Int [BoxLens]
+applyOperation :: Boxes -> Operation -> Boxes
 applyOperation state (Rem label) = M.adjust (filter (\y -> label /= fst y)) (hash label) state
 
 applyOperation state (Ins label focus) = M.insert key newBox state
@@ -37,8 +37,8 @@ applyOperation state (Ins label focus) = M.insert key newBox state
         relBox = M.findWithDefault [] key state
         newBox = update (label, focus) relBox
         
-focusPower :: M.Map Int [BoxLens] -> Int
-focusPower state = sum [(k+1) * sum (zipWith (*) [1..] (map snd v))| (k,v) <- M.toList state]
+focusPower :: Boxes -> Int
+focusPower state = sum [(k+1) * sum (zipWith (*) [1..] (map snd v)) | (k,v) <- M.toList state]
 
 hash :: Label -> Int
 hash s = go s 0
