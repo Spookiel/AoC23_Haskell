@@ -13,6 +13,8 @@ import Day11
 import Day12
 import Day15
 import Day16
+import Day19
+
 main :: IO ()
 main = do
     Day1.solve
@@ -29,3 +31,4 @@ main = do
     Day12.solve
     Day15.solve
     Day16.solve
+    Day19.solve

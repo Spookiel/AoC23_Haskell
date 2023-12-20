@@ -74,7 +74,7 @@ part2 grid = maximum (map length (top ++ bot ++ left ++ right) )
         right = [stepLight grid S.empty [((width, i), R)] | i <- [0..height]]
         left = [stepLight grid S.empty [((0, i), L)] | i <- [0..height]]
         (_, (width, height)) = A.bounds grid
-        
+
 solve = do
     Success res <- parseFromFile @String (some pline) "input/Day16.in"
     let height = length res
